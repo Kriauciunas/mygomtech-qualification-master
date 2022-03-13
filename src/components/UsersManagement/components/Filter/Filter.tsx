@@ -4,6 +4,7 @@ import { IItem } from '~/services/getUserItems';
 import FilterTab from './components/FilterTab';
 import oldEmails from '~/utils/oldEmails';
 import itemHasReusedEmail from '~/utils/itemHasReusedEmail';
+import itemHasWrongEmail from '~/utils/itemHasWrongEmail';
 
 import './filter-style.scss';
 
@@ -12,17 +13,16 @@ interface IFilter {
 }
 
 const Filter: FC<IFilter> = ({ items }) => {
-  const weakItemsCount = items.reduce((count, item) => count + 1, 0);
-
   const reusedItemsCount = items.filter((item) =>
     itemHasReusedEmail(item, items)
   ).length;
+  const wrongItemsCount = items.filter(itemHasWrongEmail).length;
   const oldEmailsCount = items.filter(oldEmails).length;
 
   return (
     <div className='filter'>
       <FilterTab title='All' count={items.length} path={Routes.Users} />
-      <FilterTab title='Wrong' count={weakItemsCount} path={Routes.Weak} />
+      <FilterTab title='Wrong' count={wrongItemsCount} path={Routes.Wrong} />
       <FilterTab title='Reused' count={reusedItemsCount} path={Routes.Reused} />
       <FilterTab title='Old' count={oldEmailsCount} path={Routes.Old} />
     </div>
